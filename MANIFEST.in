@@ -1,4 +1,4 @@
-include README.md LICENSE pyproject.toml package.json package-lock.json tsconfig.json
+include README.md README.zh-CN.md LICENSE pyproject.toml package.json package-lock.json tsconfig.json
 recursive-include jupyterlab_graffiti *
 recursive-include src *.ts
 recursive-include style *.css

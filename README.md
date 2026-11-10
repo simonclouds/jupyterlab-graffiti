@@ -1,63 +1,124 @@
 # jupyterlab-graffiti
 
-JupyterLab 3.6 上的 Jupyter Graffiti。可以在笔记本里录制单元格编辑、执行、滚动、画笔和旁白，并在原位回放。录制结果沿用经典 Jupyter Graffiti 的 `jupytergraffiti_data` 目录。
+[中文说明](README.zh-CN.md)
 
-适用于 JupyterLab `>=3.6,<4`，Python `>=3.8`。仓库里已经带有构建好的前端，安装时不需要 Node.js。
+Record a Jupyter notebook and play it back in place. A recording can include cell edits, execution, scrolling, drawings, and microphone narration.
 
-## 安装
+This is a JupyterLab 3 port of [Jupyter Graffiti](https://github.com/willkessler/jupytergraffiti). Recordings use the same `jupytergraffiti_data` directory as the classic notebook extension. JupyterLab 4 is not supported.
 
-```bash
-python3 -m pip install .
-```
+The classic sticker catalog is not included.
 
-JupyterHub 上建议装到用户目录：
+## Requirements
 
-```bash
-python3 -m pip install --user /path/to/jupyterlab-graffiti
-```
+- Python 3.8 or newer
+- JupyterLab 3.6 or newer, and older than 4
 
-装完后重启 JupyterLab。打开笔记本，工具栏第一个按钮是 **Activate Graffiti**。确认之后会出现浮动的 graffiti 面板。
+The repository already contains the built frontend. Installing does not require Node.js.
 
-已经装过时，用下面的命令换成这一份：
+## Install
 
 ```bash
-python3 -m pip install --force-reinstall --no-deps .
+python -m pip install "git+https://github.com/simonclouds/jupyterlab-graffiti.git"
 ```
 
-然后同样重启 JupyterLab。
+On JupyterHub, install into the user environment, then restart that user's notebook server:
 
-## 使用
+```bash
+python -m pip install --user "git+https://github.com/simonclouds/jupyterlab-graffiti.git"
+```
 
-1. 点击 **Activate Graffiti**，确认对话框。
-2. 点击 **Record**，再在笔记本里点一下，开始录制。
-3. 按住 Option（Alt）键结束录制。单元格左侧会出现绿色标记。
-4. 点击标记即可回放。
+From a local clone:
 
-录音保存在笔记本服务器上的 `jupytergraffiti_data/`。
+```bash
+python -m pip install .
+```
 
-## 麦克风
+Restart JupyterLab after installing. Open a notebook and use **Activate Graffiti** on the toolbar.
 
-浏览器只允许在安全页面使用麦克风。用 `https://` 打开 JupyterLab，或者在 Chrome 中打开 `chrome://flags/#unsafely-treat-insecure-origin-as-secure`，启用后填入实验页的完整地址（包含 `http://` 和端口），然后重新启动浏览器。
+To replace an older copy of this extension:
 
-如果电脑上有 BlackHole 这类虚拟声卡，Chrome 可能会优先录到它们。本插件会改用内置麦克风。录制开始后面板上会写明当前使用的设备，例如 `Recording from MacBook Pro麦克风`。
+```bash
+python -m pip install --force-reinstall --no-deps "git+https://github.com/simonclouds/jupyterlab-graffiti.git"
+```
 
-## 开发
+Restart JupyterLab again so it loads the new frontend files.
 
-修改 `src/` 之后需要重新构建前端：
+## Use
+
+1. Click **Activate Graffiti** and accept the dialog. The floating panel opens. A notebook that was activated before shows **Show Graffiti Editor** and **Hide Graffiti Editor** instead.
+2. Click **Record**, then click in the notebook. Recording starts on that click.
+3. Edit cells, run them, scroll, and draw. The panel names the microphone it is using.
+4. Hold the Option key to stop. On other keyboards that key is Alt. A green marker appears beside the cell.
+5. Click the marker to play. Press Esc to leave playback and restore the cell text from the moment playback started.
+
+A short press of Option during recording marks a skip. During playback the panel can pause, scrub, change speed, mute, and jump 5 seconds.
+
+**Rerecord**, **Cleanup Takes**, and **Remove Graffiti** apply to the movie on the active cell.
+
+## Microphone
+
+Browsers only provide a microphone on a secure page: `https://`, or `http://localhost`. On any other `http://` address, Chrome locks the site's microphone permission and this extension cannot record narration.
+
+For a private JupyterLab that is served over `http://`, open `chrome://flags/#unsafely-treat-insecure-origin-as-secure`, set the flag to **Enabled**, and enter the exact origin, including the scheme and port. For example, `http://192.168.1.10:8888`. Relaunch Chrome, reload JupyterLab, and allow the microphone when asked.
+
+Also allow Chrome in the operating system's microphone privacy settings.
+
+Chrome sometimes prefers a virtual input, such as BlackHole or a meeting loopback, over the computer's microphone. When the selected device looks virtual, this extension switches to a built-in microphone. After recording starts, the panel shows the device name, for example `Recording from MacBook Pro Microphone (Built-in)`.
+
+## Recordings on disk
+
+The notebook server writes recordings under its working directory:
+
+```text
+jupytergraffiti_data/notebooks/<notebook-id>/authors/<author-id>/
+```
+
+`manifest.json` and each take's `history.txt` are stored with the classic LZ-string compression. `audio.txt` is the narration as base64 WebM. The layout matches classic Jupyter Graffiti.
+
+## Python API
+
+Call this from a notebook in the same JupyterLab session. The editor must already be loaded for that notebook.
+
+```python
+import jupyterlab_graffiti
+
+jupyterlab_graffiti.play_recording("recording-or-take-id")
+jupyterlab_graffiti.play_recording_with_prompt("recording-or-take-id", "optional prompt")
+jupyterlab_graffiti.stop_playback()
+jupyterlab_graffiti.set_access_level("view")  # "view" disables recording
+jupyterlab_graffiti.transfer_graffiti()
+jupyterlab_graffiti.package_graffiti()
+```
+
+`package_graffiti()` writes `graffiti_package.tar.gz` from the `jupytergraffiti_data` directory.
+
+## Development
+
+Node.js is required only to rebuild the frontend.
 
 ```bash
 npm install
+npm run test:unit
 npm run build
 npm run build:labextension
-python3 -m pip install --force-reinstall --no-deps .
+python -m pip install --force-reinstall --no-deps .
 ```
 
-`npm run build:labextension` 需要当前环境里已有 JupyterLab 3.6。
+`npm run build:labextension` uses the `jupyter` command on `PATH`, and that JupyterLab must be 3.6. After a frontend change, include the updated files in `jupyterlab_graffiti/labextension/` so other people can still install without Node.js.
 
-单元测试：
+Interface tests use [Galata](https://github.com/jupyterlab/jupyterlab/tree/main/galata) and Playwright against JupyterLab at `http://127.0.0.1:8888`:
 
 ```bash
-npm run test:unit
+cd ui-tests
+npm install
+npx playwright install chrome-for-testing
+npx playwright test
 ```
 
-界面测试在 `ui-tests/`，需要本机 JupyterLab 和 Playwright。
+## License
+
+[BSD 3-Clause](LICENSE).
+
+## Acknowledgements
+
+The panel, recording flow, on-disk format, and kernel API follow [Jupyter Graffiti](https://github.com/willkessler/jupytergraffiti) by Will Kessler. This repository is a separate implementation for JupyterLab 3.
