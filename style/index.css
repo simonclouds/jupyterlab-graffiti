@@ -1,0 +1,400 @@
+.jp-NotebookPanel {
+  position: relative;
+}
+
+.jp-graffiti-activate {
+  height: 24px;
+  margin: 0 4px;
+  padding: 0 8px;
+  border: 1px solid var(--jp-border-color1, #bdbdbd);
+  border-radius: 2px;
+  background: var(--jp-layout-color1, #fff);
+  color: var(--jp-ui-font-color1, #222);
+  font: 12px Helvetica, Arial, sans-serif;
+  cursor: pointer;
+}
+
+.jp-graffiti-panel {
+  position: absolute;
+  top: 52px;
+  right: 18px;
+  z-index: 20;
+  width: 214px;
+  padding: 6px 8px 6px 4px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background: rgba(245, 245, 245, 0.94);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.12);
+  font-family: Helvetica, Arial, sans-serif;
+  color: #444;
+}
+
+.jp-graffiti-hidden {
+  display: none;
+}
+
+.jp-graffiti-panel-inner {
+  display: flex;
+}
+
+.jp-graffiti-drag {
+  flex: 0 0 10px;
+  margin-right: 4px;
+  cursor: grab;
+  background-image: radial-gradient(#b5b5b5 0.8px, transparent 0.9px);
+  background-size: 3px 3px;
+}
+
+.jp-graffiti-drag:active,
+.jp-graffiti-title:active {
+  cursor: grabbing;
+}
+
+.jp-graffiti-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.jp-graffiti-title {
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  margin-bottom: 4px;
+}
+
+.jp-graffiti-mark {
+  width: 16px;
+  height: 12px;
+  margin-right: 6px;
+  background: rgb(47, 147, 107);
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+}
+
+.jp-graffiti-logo {
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  font-size: 12px;
+  transform: scaleY(1.15);
+}
+
+.jp-graffiti-section {
+  display: none;
+}
+
+.jp-graffiti-panel[data-activity='idle'] .jp-graffiti-section-idle,
+.jp-graffiti-panel[data-activity='recordingPending'] .jp-graffiti-section-notifier,
+.jp-graffiti-panel[data-activity='recording'] .jp-graffiti-section-recording,
+.jp-graffiti-panel[data-activity='recording'] .jp-graffiti-section-notifier,
+.jp-graffiti-panel[data-activity='playing'] .jp-graffiti-section-playback,
+.jp-graffiti-panel[data-activity='playbackPaused'] .jp-graffiti-section-playback,
+.jp-graffiti-panel[data-activity='idle'] .jp-graffiti-section-notifier,
+.jp-graffiti-panel[data-activity='idle'] .jp-graffiti-section-terminal,
+.jp-graffiti-panel[data-activity='recording'] .jp-graffiti-section-terminal {
+  display: block;
+}
+
+.jp-graffiti-panel.has-movie[data-activity='idle'] .jp-graffiti-section-takes {
+  display: flex;
+}
+
+.jp-graffiti-panel.has-movie .jp-graffiti-record {
+  display: none;
+}
+
+.jp-graffiti-panel:not(.has-movie) .jp-graffiti-rerecord,
+.jp-graffiti-panel:not(.has-movie) .jp-graffiti-cleanup,
+.jp-graffiti-panel:not(.has-movie) .jp-graffiti-remove {
+  display: none;
+}
+
+.jp-graffiti-panel button {
+  height: 28px;
+  margin: 2px 2px 0 0;
+  padding: 2px 6px;
+  border: 1px solid #c8c8c8;
+  border-radius: 2px;
+  background: #fff;
+  color: #333;
+  font: 12px Helvetica, Arial, sans-serif;
+  cursor: pointer;
+}
+
+.jp-graffiti-panel button:hover {
+  border-color: #888;
+}
+
+.jp-graffiti-recording-help {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.jp-graffiti-panel .jp-graffiti-stop {
+  height: auto;
+  min-width: 72px;
+  padding: 4px 6px;
+  border: 1px solid #222;
+  border-radius: 6px;
+  background: #ddd;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.jp-graffiti-hint {
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.jp-graffiti-hint span {
+  font-weight: 700;
+  border-bottom: 1px dashed #222;
+}
+
+.jp-graffiti-recording-status {
+  display: flex;
+  align-items: center;
+  height: 22px;
+}
+
+.jp-graffiti-flash {
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: #e10600;
+  animation: jp-graffiti-flash 1s steps(2) infinite;
+}
+
+.jp-graffiti-panel.is-skipping .jp-graffiti-flash {
+  animation: none;
+  background: #bbb;
+}
+
+@keyframes jp-graffiti-flash {
+  50% {
+    opacity: 0.15;
+  }
+}
+
+.jp-graffiti-rec-time,
+.jp-graffiti-play-time {
+  font: 700 13px ui-monospace, monospace;
+}
+
+.jp-graffiti-rec-time {
+  color: #e10600;
+}
+
+.jp-graffiti-pens,
+.jp-graffiti-colors,
+.jp-graffiti-playback-buttons,
+.jp-graffiti-scrub-row,
+.jp-graffiti-takes {
+  display: flex;
+  align-items: center;
+}
+
+.jp-graffiti-pens button,
+.jp-graffiti-colors button {
+  width: 28px;
+  height: 28px;
+  padding: 4px;
+}
+
+.jp-graffiti-pens svg,
+.jp-graffiti-playback-buttons svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.jp-graffiti-colors {
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.jp-graffiti-color {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid #888;
+}
+
+.jp-graffiti-color.is-selected {
+  outline: 1px solid #111;
+  outline-offset: 1px;
+}
+
+.jp-graffiti-ink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 11px;
+}
+
+.jp-graffiti-takes-title {
+  margin-right: 4px;
+  font-size: 13px;
+}
+
+.jp-graffiti-takes-list {
+  display: flex;
+  gap: 2px;
+  max-width: 130px;
+  overflow-x: auto;
+}
+
+.jp-graffiti-take {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px dotted transparent;
+  background: transparent;
+}
+
+.jp-graffiti-take.is-selected {
+  border: 1px solid #222;
+}
+
+.jp-graffiti-play,
+.jp-graffiti-pause {
+  width: 36px;
+}
+
+.jp-graffiti-panel[data-activity='playing'] .jp-graffiti-play,
+.jp-graffiti-panel[data-activity='playbackPaused'] .jp-graffiti-pause {
+  display: none;
+}
+
+.jp-graffiti-scrub {
+  width: 92px;
+  margin: 0;
+}
+
+.jp-graffiti-play-time {
+  margin-left: 6px;
+  font-weight: 400;
+}
+
+.jp-graffiti-exit {
+  margin-left: 8px;
+  color: rgb(249, 92, 60);
+  font-weight: 700;
+}
+
+.jp-graffiti-notifier {
+  max-width: 180px;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.jp-graffiti-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.jp-graffiti-cancel {
+  display: none;
+  color: #05c;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.jp-graffiti-panel[data-activity='recordingPending'] .jp-graffiti-cancel,
+.jp-graffiti-panel[data-activity='recording'] .jp-graffiti-cancel {
+  display: inline;
+}
+
+.jp-graffiti-terminal {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.jp-graffiti-terminal-out {
+  flex: 1;
+  min-height: 28px;
+  max-height: 72px;
+  overflow: auto;
+  margin: 0;
+  padding: 3px;
+  background: #111;
+  color: #d6f5d6;
+  font: 11px ui-monospace, monospace;
+}
+
+.jp-graffiti-terminal-in {
+  width: 78px;
+  font: 11px sans-serif;
+}
+
+.jp-Notebook .jp-Cell {
+  position: relative;
+}
+
+.jp-graffiti-marker {
+  position: absolute;
+  right: 8px;
+  top: 30px;
+  z-index: 6;
+  width: 18px;
+  height: 12px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+.jp-graffiti-marker:hover,
+.jp-Cell.jp-graffiti-hot .jp-graffiti-marker {
+  opacity: 1;
+}
+
+.jp-Cell.jp-graffiti-hot .jp-InputArea-editor,
+.jp-Cell.jp-graffiti-hot .jp-RenderedHTMLCommon {
+  outline: 3px dashed rgb(47, 147, 107);
+  outline-offset: 2px;
+}
+
+.jp-graffiti-note {
+  position: absolute;
+  left: 8px;
+  bottom: 4px;
+  z-index: 2;
+  padding: 1px 6px;
+  border: 1px solid #e0b15a;
+  border-radius: 3px;
+  background: #fff4d6;
+  color: #8a4b08;
+  font: 12px sans-serif;
+  pointer-events: none;
+}
+
+.jp-graffiti-overlay {
+  position: absolute;
+  z-index: 4;
+  display: none;
+  pointer-events: none;
+}
+
+.jp-graffiti-overlay.jp-graffiti-drawing,
+.jp-graffiti-overlay.jp-graffiti-visible {
+  display: block;
+}
+
+.jp-graffiti-overlay.jp-graffiti-drawing {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.jp-graffiti-panel.is-skipping .jp-graffiti-stop {
+  color: #c00;
+}

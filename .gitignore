@@ -1,0 +1,14 @@
+node_modules
+.venv
+lib
+tsconfig.tsbuildinfo
+*.egg-info
+dist
+build
+.pytest_cache
+ui-tests/test-results
+ui-tests/playwright-report
+.jupyter
+__pycache__
+*.pyc
+.DS_Store

@@ -1,0 +1,13 @@
+include README.md LICENSE pyproject.toml package.json package-lock.json tsconfig.json
+recursive-include jupyterlab_graffiti *
+recursive-include src *.ts
+recursive-include style *.css
+recursive-include scripts *.js
+recursive-include tests *
+recursive-include fixtures *
+recursive-include ui-tests *.py *.js *.json *.ts *.ipynb *.txt *.md
+global-exclude __pycache__
+global-exclude *.py[cod]
+prune node_modules
+prune .venv
+prune ui-tests/node_modules
